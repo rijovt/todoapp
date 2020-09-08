@@ -20,4 +20,12 @@ class TodolistController extends Controller
 
         return response('Updated successfully',200);
     }
+    public function create(Request $request){ 
+        $todo = new Todolist;
+        $todo->taskname = $request->taskname;
+        $todo->order = $request->order;
+        $todo->save();
+
+        return response('Created successfully',200);
+    }
 }

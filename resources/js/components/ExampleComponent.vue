@@ -2,6 +2,8 @@
     <div class="row">
     <div class="col-8">
 				<h3>TODO LIST</h3>
+        <input type="text" v-model="newTodo" class="form-control form-control-lg" placeholder="Add new todo" @keyup.enter="addTodo">
+        <br>
         <table class="table">
           <thead>
 						<tr>
@@ -28,13 +30,16 @@
 import draggable from "vuedraggable";
 
     export default {
+
         props:['lists'],
         components: {
             draggable
         },
         data() {
             return {
-            listsNew: this.lists,
+                newId:this.lists.length,
+                newTodo:'',
+                listsNew: this.lists,
             }
         },
         methods: {
@@ -47,6 +52,26 @@ import draggable from "vuedraggable";
                 }).then((response) =>{
                     //
                 })
+            },
+            addTodo(){
+                if(this.newTodo.trim().length==0){
+                    return
+                }
+                let newlist={
+                    id: ++this.newId,
+                    taskname:this.newTodo,
+                    order:this.newId,
+                }
+                this.listsNew.push(newlist)
+
+                axios.put('/create',{
+                    taskname:this.newTodo,
+                    order:this.newId,
+                }).then((response) =>{
+                    //
+                })
+                this.newTodo='';
+
             }
         },
         mounted() {
